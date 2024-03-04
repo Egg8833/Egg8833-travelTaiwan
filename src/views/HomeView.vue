@@ -70,7 +70,7 @@ const data2 = [
 
 <template>
   <div class="homeIndex">
-    <!-- banner -->
+    <!-- banner首頁 -->
     <div class="banner flex items-center justify-center flex-col">
       <h1
         class="title-text text-center text-[40px] text-[#fefefe] leading-11 mb-5"
