@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import mainMv from "@/components/homeView/mainMv.vue";
 import hotView from "@/components/homeView/hotView.vue";
 
-import cardSlider from "@/components/cardSlider.vue";
+import cardSlider from "@/components/homeView/cardSlider.vue";
 import favorite from "@/assets/images/icon/heart-outline.svg";
 import start from "@/assets/images/icon/star-filled.svg";
 

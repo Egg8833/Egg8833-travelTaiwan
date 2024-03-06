@@ -1,12 +1,14 @@
 <script setup>
 import homeViewData from "@/assets/data/homeViewPoint.json";
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import northMap from "@/assets/images/map_north.png";
 import centerMap from "@/assets/images/map_center.png";
 import southMap from "@/assets/images/map_south.png";
 import eastMap from "@/assets/images/map_east.png";
 import islandMap from "@/assets/images/map_island.png";
+import { useWindowSize } from "@vueuse/core";
 
+const { width: deviceWidth } = useWindowSize();
 const selectIndex = ref(0);
 const viewPointData = [
   {
@@ -60,6 +62,27 @@ const dataImg = computed(() => viewPointImg[selectIndex.value].src);
 
 const selectAreaData = computed(() => {
   return homeViewData[selectIndex.value][viewArea[selectIndex.value]];
+});
+
+const idx = ref(0);
+const maxIdx = computed(() => selectAreaData.value.length - 3);
+const clickAreaIdx = (direction) => {
+  if (direction === "left") {
+    idx.value = Math.max(0, idx.value - 1);
+  } else {
+    idx.value = Math.min(idx.value + 1, maxIdx.value);
+  }
+};
+
+const sliderStyle = computed(() => {
+  return {
+    transform: `translateX(${-216 * idx.value}px)
+  `,
+  };
+});
+
+watch(deviceWidth, () => {
+  idx.value = 0;
 });
 </script>
 
@@ -132,28 +155,43 @@ const selectAreaData = computed(() => {
           </div>
 
           <!-- 景點卡牌 -->
-          <div class="-mr-4">
-            <div
-              class="viewPointSlider pt-5 gap-4 overflow-auto mx-auto max-w-[650px]"
+          <div class="relative mx-auto max-w-[700px]">
+            <button
+              v-if="idx > 0"
+              @click="clickAreaIdx('left')"
+              class="shadow024 hidden w-[50px] h-[50px] rounded-full bg-white items-center justify-center absolute -left-5 top-1/2 -translate-y-1/2 z-2 md:flex"
             >
-              <a
+              <img src="@/assets/images/icon/arrow-left.svg" alt="" />
+            </button>
+            <button
+              v-if="idx < maxIdx"
+              @click="clickAreaIdx('right')"
+              class="shadow024 w-[50px] h-[50px] rounded-full bg-white items-center justify-center absolute -right-3 top-1/2 -translate-y-1/2 z-2 hidden md:flex xl:-right-6"
+            >
+              <img src="@/assets/images/icon/arrow-right.svg" alt="" />
+            </button>
+            <div class="viewPointSlider pt-5 flex gap-4 overflow-auto">
+              <router-link
                 v-for="data in selectAreaData"
                 :key="data"
-                class="areaImg inline-block border-solid border-[#1Fb588] border-2 rounded-2xl overflow-hidden text-[#fff] relative flex-shrink-0"
-                href="#"
+                :to="{
+                  path: `viewList/${data.id}`,
+                }"
+                class="areaImg inline-block border-solid border-[#1Fb588] border-2 rounded-2xl overflow-hidden text-[#fff] relative flex-shrink-0 last:mr-4"
+                :style="sliderStyle"
               >
                 <img
-                  :src="data.photoSrc || data.Picture.PictureUrl1"
+                  :src="data.photoSrc"
                   class="w-50 h-50 object-cover"
-                  :alt="data.title || data.ScenicSpotName"
+                  :alt="data.title"
                 />
                 <div class="absolute bottom-3 left-3 z-2">
-                  <h4 class="pb-2">{{ data.city || data.City }}</h4>
+                  <h4 class="pb-2">{{ data.city }}</h4>
                   <h4 class="text-[18px] font-700">
-                    {{ data.title || data.ScenicSpotName }}
+                    {{ data.title }}
                   </h4>
                 </div>
-              </a>
+              </router-link>
             </div>
           </div>
         </div>
@@ -188,12 +226,15 @@ const selectAreaData = computed(() => {
     overflow: hidden;
   }
   .viewPointSlider {
+    transition: transform 0.5s;
     &::-webkit-scrollbar {
       display: none;
     }
   }
   .areaImg {
+    transition: transform 0.5s;
     position: relative;
+
     &::after {
       content: "";
       position: absolute;
