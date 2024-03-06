@@ -1,4 +1,5 @@
 <script setup>
+import homeViewData from "@/assets/data/homeViewPoint.json";
 import { computed, ref } from "vue";
 import northMap from "@/assets/images/map_north.png";
 import centerMap from "@/assets/images/map_center.png";
@@ -51,14 +52,50 @@ const viewPointImg = [
     src: islandMap,
   },
 ];
+
 const viewArea = ["北部地區", "中部地區", "南部地區", "東部地區", "離島地區"];
 
 const dataText = computed(() => viewPointData[selectIndex.value].text);
 const dataImg = computed(() => viewPointImg[selectIndex.value].src);
+
+const selectAreaData = computed(() => {
+  return homeViewData[selectIndex.value][viewArea[selectIndex.value]];
+});
 </script>
 
 <template>
-  <div class="viewPointContainer py-10">
+  <div class="viewPointContainer py-15 overflow-hidden">
+    <img
+      src="@/assets/images/areaImg/spotBg_north.jpg"
+      alt="spotBg"
+      class="viewPointBg"
+      v-show="selectIndex === 0"
+    />
+    <img
+      src="@/assets/images/areaImg/spotBg_center.jpg"
+      alt="spotBg"
+      class="viewPointBg"
+      v-show="selectIndex === 1"
+    />
+    <img
+      src="@/assets/images/areaImg/spotBg_south.jpg"
+      alt="spotBg"
+      class="viewPointBg"
+      v-show="selectIndex === 2"
+    />
+    <img
+      src="@/assets/images/areaImg/spotBg_east.jpg"
+      alt="spotBg"
+      class="viewPointBg"
+      v-show="selectIndex === 3"
+    />
+    <img
+      src="@/assets/images/areaImg/spotBg_island.jpg"
+      alt="spotBg"
+      class="viewPointBg"
+      v-show="selectIndex === 4"
+    />
+
     <div class="relative z-[2]">
       <h2
         class="text-center text-[30px] text-[#188E6B] font-700 relative pb-4 md:hidden"
@@ -93,38 +130,28 @@ const dataImg = computed(() => viewPointImg[selectIndex.value].src);
               {{ text }}
             </p>
           </div>
+
+          <!-- 景點卡牌 -->
           <div class="-mr-4">
             <div
-              class="viewPointSlider pt-5 flex gap-4 overflow-auto mx-auto max-w-[650px]"
+              class="viewPointSlider pt-5 gap-4 overflow-auto mx-auto max-w-[650px]"
             >
               <a
-                class="inline-block border-solid border-[#1Fb588] border-2 rounded-2xl overflow-hidden text-[#fff] relative flex-shrink-0"
+                v-for="data in selectAreaData"
+                :key="data"
+                class="areaImg inline-block border-solid border-[#1Fb588] border-2 rounded-2xl overflow-hidden text-[#fff] relative flex-shrink-0"
                 href="#"
               >
-                <img src="https://fakeimg.pl/200x200/200" />
-                <div class="absolute bottom-3 left-3">
-                  <h4 class="pb-2">台北市</h4>
-                  <h4 class="text-[18px] font-700">士林夜市</h4>
-                </div>
-              </a>
-              <a
-                class="inline-block border-solid border-[#1Fb588] border-2 rounded-2xl overflow-hidden text-[#fff] relative flex-shrink-0"
-                href="#"
-              >
-                <img src="https://fakeimg.pl/200x200/200" />
-                <div class="absolute bottom-3 left-3">
-                  <h4 class="pb-2">台北市</h4>
-                  <h4 class="text-[18px] font-700">士林夜市</h4>
-                </div>
-              </a>
-              <a
-                class="inline-block border-solid border-[#1Fb588] border-2 rounded-2xl overflow-hidden text-[#fff] relative flex-shrink-0"
-                href="#"
-              >
-                <img src="https://fakeimg.pl/200x200/200" />
-                <div class="absolute bottom-3 left-3">
-                  <h4 class="pb-2">台北市</h4>
-                  <h4 class="text-[18px] font-700">士林夜市</h4>
+                <img
+                  :src="data.photoSrc || data.Picture.PictureUrl1"
+                  class="w-50 h-50 object-cover"
+                  :alt="data.title || data.ScenicSpotName"
+                />
+                <div class="absolute bottom-3 left-3 z-2">
+                  <h4 class="pb-2">{{ data.city || data.City }}</h4>
+                  <h4 class="text-[18px] font-700">
+                    {{ data.title || data.ScenicSpotName }}
+                  </h4>
                 </div>
               </a>
             </div>
@@ -137,9 +164,6 @@ const dataImg = computed(() => viewPointImg[selectIndex.value].src);
 
 <style lang="scss">
 .viewPointContainer {
-  background-image: url("@/assets/images/viewPointBg-3.jpg");
-  background-position: bottom;
-  background-size: cover;
   position: relative;
   &::after {
     content: "";
@@ -148,13 +172,59 @@ const dataImg = computed(() => viewPointImg[selectIndex.value].src);
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
+    background-color: rgba(0, 0, 0, 0.4);
     z-index: 0;
   }
+
+  .viewPointBg {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    object-fit: cover;
+    animation: 2s blurIn cubic-bezier(0.2, 0.98, 0.5, 0.98);
+    overflow: hidden;
+  }
+  .viewPointSlider {
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+  .areaImg {
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.2);
+      z-index: 0;
+    }
+  }
+  @keyframes blurIn {
+    0% {
+      -webkit-transform: scale3d(1.2, 1.2, 1);
+      transform: scale3d(1.2, 1.2, 1);
+      -webkit-filter: blur(10px);
+      filter: blur(10px);
+    }
+    100% {
+      -webkit-transform: scale3d(1, 1, 1);
+      transform: scale3d(1, 1, 1);
+      -webkit-filter: blur(0);
+      filter: blur(0);
+    }
+  }
 }
-.viewPointSlider {
-  &::-webkit-scrollbar {
-    display: none;
+@media (min-width: 960px) {
+  .viewPointContainer {
+    &::after {
+      background-color: rgba(0, 0, 0, 0.3);
+    }
   }
 }
 </style>
