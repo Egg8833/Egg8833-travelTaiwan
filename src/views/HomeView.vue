@@ -1,11 +1,11 @@
-
-
 <script setup>
-import {} from "vue";
-import mainMv from "../components/mainMv.vue";
-import cardSlider from "../components/cardSlider.vue";
-import favorite from "../assets/images/icon/heart-outline.svg";
-import start from "../assets/images/icon/star-filled.svg";
+import { computed, ref } from "vue";
+import mainMv from "@/components/homeView/mainMv.vue";
+import hotView from "@/components/homeView/hotView.vue";
+
+import cardSlider from "@/components/cardSlider.vue";
+import favorite from "@/assets/images/icon/heart-outline.svg";
+import start from "@/assets/images/icon/star-filled.svg";
 
 const data1 = [
   {
@@ -73,29 +73,36 @@ const data2 = [
     <!-- banner首頁 -->
     <div class="banner flex items-center justify-center flex-col">
       <h1
-        class="title-text text-center text-[40px] text-[#fefefe] leading-11 mb-5"
+        class="wow animate__zoomIn title-text text-center text-[40px] text-[#fefefe] leading-11 mb-5"
+        data-wow-duration="1s"
       >
         開始實現
         <br class="md:hidden" />
         你的夢想旅程
       </h1>
-      <div class="relative pb-5 max-w-[410px]">
+      <div
+        class="wow animate__bounceIn relative pb-5 max-w-[410px]"
+        data-wow-duration="1s"
+      >
         <input
           type="text"
           class="inputStyle rounded-[60px] py-2 px-4 bg-[f0f0f0] md:w-320px md:py-5 md:placeholder:text-[16px]"
           placeholder="想要去哪?"
         />
-        <img
-          src="../assets/images/icon/search.svg"
-          alt="search"
-          class="absolute right-4 top-[10px] md:top-3 md:w-8"
-        />
+        <button>
+          <img
+            src="../assets/images/icon/search.svg"
+            alt="search"
+            class="absolute right-4 top-[10px] md:top-3 md:w-8"
+          />
+        </button>
       </div>
     </div>
 
     <!-- 打卡景點 -->
-    <cardSlider :data="data2"></cardSlider>
+    <!-- <cardSlider :data="data2"></cardSlider> -->
 
+    <hotView></hotView>
     <!-- 注目景點 -->
     <div class="viewPoint flex flex-col items-center justify-center">
       <h3

@@ -20,4 +20,8 @@
   &:hover {
     @apply bg-[#188e6b] border: 1px solid #188E6B text-[#fff];
   }
+
+  &.active {
+    @apply bg-[#188e6b] border: 1px solid #188E6B text-[#fff];
+  }
 }
