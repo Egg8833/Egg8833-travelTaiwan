@@ -6,16 +6,33 @@ import ArticleToggle from "../components/ArticleToggle.vue";
 import { useRoute } from "vue-router";
 import { useViewListStore } from "../store/viewStore";
 import ZipCode from "../assets/data/zipCode.json";
+import homeViewData from "@/assets/data/homeViewPoint.json";
+
 const store = useViewListStore();
 // store.getData();
 // 優化建議 進入頁面後把資料存入到localstrorage
+
+const viewArea = ["北部地區", "中部地區", "南部地區", "東部地區", "離島地區"];
 
 const route = useRoute();
 const viewListId = route.path.split("/").pop();
 
 const viewData = computed(() => {
-  let [data] = store.viewData.filter((item) => item.id == viewListId);
-  return data;
+  // 從首頁熱門景點來的資料
+  if (viewListId.startsWith("VCA")) {
+    let areaData = [];
+    homeViewData.forEach((e, i) => {
+      areaData.push(e[viewArea[i]]);
+    });
+
+    let [data] = areaData.flat().filter((item) => item.id == viewListId);
+
+    return data;
+  } else {
+    let [data] = store.viewData.filter((item) => item.id == viewListId);
+
+    return data;
+  }
 });
 
 const data = ref({
@@ -144,11 +161,14 @@ onMounted(() => {
               >
                 開放時間
               </h4>
+
               <ArticleToggle
+                v-if="viewData['openTime']"
                 class="text-[#616161 font-500 leading-5 md:text-[18px] leading-6"
                 :content="viewData['openTime']"
                 :maxSummaryWordCount="120"
               ></ArticleToggle>
+              <p v-else>全日開放，依各店家營業時間為主。</p>
             </div>
           </div>
         </div>

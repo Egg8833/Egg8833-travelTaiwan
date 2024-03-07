@@ -10,8 +10,11 @@
 </template>
 
 <script setup>
+import { onMounted } from "vue";
 import Header from "./components/header.vue";
 import Footer from "./components/Footer.vue";
+import WOW from "wow.js";
+import "animate.css";
 import { useHead } from "@vueuse/head";
 
 useHead({
@@ -22,6 +25,16 @@ useHead({
       content: "島遊台灣，台灣島遊，探索台灣的旅程",
     },
   ],
+});
+
+onMounted(() => {
+  new WOW({
+    boxClass: "wow",
+    animateClass: "animate__animated",
+    offset: 200,
+    mobile: true,
+    live: true,
+  }).init();
 });
 </script>
 
@@ -35,5 +48,8 @@ useHead({
 
 #view {
   flex: 1;
+}
+img {
+  -webkit-user-drag: none;
 }
 </style>
