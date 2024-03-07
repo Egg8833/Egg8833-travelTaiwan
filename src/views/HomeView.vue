@@ -99,9 +99,6 @@ const data2 = [
       </div>
     </div>
 
-    <!-- 打卡景點 -->
-    <!-- <cardSlider :data="data2"></cardSlider> -->
-
     <hotView></hotView>
     <!-- 注目景點 -->
     <div class="viewPoint flex flex-col items-center justify-center">

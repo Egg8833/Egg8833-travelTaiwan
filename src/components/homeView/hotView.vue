@@ -61,6 +61,7 @@ const dataText = computed(() => viewPointData[selectIndex.value].text);
 const dataImg = computed(() => viewPointImg[selectIndex.value].src);
 
 const selectAreaData = computed(() => {
+  idx.value = 0;
   return homeViewData[selectIndex.value][viewArea[selectIndex.value]];
 });
 
