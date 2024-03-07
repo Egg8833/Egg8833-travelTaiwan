@@ -13,9 +13,10 @@ const getDynamicBase = uri => {
 const getBase = clientOnlyDynamicBase => {
   return clientOnlyDynamicBase(window.location.pathname)
 }
+const path = process.env.NODE_ENV === 'production' ? '/travelTaiwan/' : ''
 
 const router = createRouter({
-  history: createWebHistory('/travelTaiwan/'),
+  history: createWebHistory(path),
   routes: [
     {
       path: '/',
