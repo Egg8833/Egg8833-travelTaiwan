@@ -22,16 +22,6 @@ const props = defineProps({
       </div>
 
       <div class="relative">
-        <button
-          class="shadow024 hidden w-[50px] h-[50px] rounded-full bg-white items-center justify-center absolute -left-1 top-1/2 -translate-y-1/2 z-2 lg:flex"
-        >
-          <img src="../assets/images/icon/arrow-left.svg" alt="" />
-        </button>
-        <button
-          class="shadow024 w-[50px] h-[50px] rounded-full bg-white items-center justify-center absolute right-3 top-1/2 -translate-y-1/2 z-2 hidden lg:flex"
-        >
-          <img src="../assets/images/icon/arrow-right.svg" alt="" />
-        </button>
         <div
           class="flex gap-5 flex-wrap justify-center pb-8 lg:flex-nowrap lg:justify-unset lg:overflow-x-hidden lg:gap-12"
         >
