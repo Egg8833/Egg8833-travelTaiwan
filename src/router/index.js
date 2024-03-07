@@ -15,7 +15,7 @@ const getBase = clientOnlyDynamicBase => {
 }
 
 const router = createRouter({
-  history: createWebHistory(getBase(getDynamicBase)),
+  history: createWebHistory('/travelTaiwan/'),
   routes: [
     {
       path: '/',
