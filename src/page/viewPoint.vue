@@ -12,7 +12,14 @@ const store = useViewListStore();
 // store.getData();
 // 優化建議 進入頁面後把資料存入到localstrorage
 
-const viewArea = ["北部地區", "中部地區", "南部地區", "東部地區", "離島地區"];
+const viewArea = [
+  "北部地區",
+  "中部地區",
+  "南部地區",
+  "東部地區",
+  "離島地區",
+  "熱門打卡",
+];
 
 const route = useRoute();
 const viewListId = route.path.split("/").pop();
@@ -24,6 +31,7 @@ const viewData = computed(() => {
     homeViewData.forEach((e, i) => {
       areaData.push(e[viewArea[i]]);
     });
+    console.log("d", areaData);
 
     let [data] = areaData.flat().filter((item) => item.id == viewListId);
 
