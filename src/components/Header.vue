@@ -2,6 +2,13 @@
 import { computed, ref } from "vue";
 import { useWindowSize } from "@vueuse/core";
 const { width: windowWidth } = useWindowSize();
+
+import { storeToRefs } from "pinia";
+import { useHomeViewStore } from "@/store/homeViewStore";
+const homeViewstore = useHomeViewStore();
+const { travelName } = storeToRefs(homeViewstore);
+const { increment } = homeViewstore;
+
 const menuListShow = ref(false);
 const is960Width = computed(() => {
   windowWidth.value >= 960
@@ -42,8 +49,9 @@ const is960Width = computed(() => {
         <div class="relative pb-5 md:pb-0">
           <input
             type="text"
-            class="inputStyle rounded-[60px] py-2 px-4 w-full md:bg-[#f0f0f0]"
+            class="inputStyle rounded-[60px] py-2 px-4 w-full text-[#188E6B] font-700 md:bg-[#f0f0f0]"
             placeholder="想要去哪?"
+            v-model="travelName"
           />
           <img
             src="../assets/images/icon/search.svg"

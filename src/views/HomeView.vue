@@ -3,6 +3,12 @@ import { computed, ref } from "vue";
 import mainMv from "@/components/homeView/mainMv.vue";
 import HotView from "@/components/homeView/HotView.vue";
 import HotCheckInPoint from "@/components/homeView/HotCheckInPoint.vue";
+import { storeToRefs } from "pinia";
+import { useHomeViewStore } from "@/store/homeViewStore";
+
+const homeViewstore = useHomeViewStore();
+const { travelName } = storeToRefs(homeViewstore);
+const { searchTravel } = homeViewstore;
 
 const data1 = [
   {
@@ -51,6 +57,7 @@ const data1 = [
 
 <template>
   <div class="homeIndex">
+    <button @click="increment">@123</button>
     <!-- banner首頁 -->
     <div class="banner flex items-center justify-center flex-col">
       <h1
@@ -67,10 +74,11 @@ const data1 = [
       >
         <input
           type="text"
-          class="inputStyle rounded-[60px] py-2 px-4 bg-[f0f0f0] md:w-320px md:py-5 md:placeholder:text-[16px]"
+          class="inputStyle rounded-[60px] py-2 px-4 bg-[f0f0f0] text-[#188E6B] font-700 md:w-320px md:py-5 md:placeholder:text-[16px]"
           placeholder="想要去哪?"
+          v-model="travelName"
         />
-        <button>
+        <button @click="searchTravel(travelName)">
           <img
             src="../assets/images/icon/search.svg"
             alt="search"

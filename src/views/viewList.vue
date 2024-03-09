@@ -1,10 +1,21 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import card from "../components/card.vue";
-import { useViewListStore } from "../store/viewStore";
-import cityListData from "../assets/data/cityList.json";
+import card from "@/components/card.vue";
+import cityListData from "@/assets/data/cityList.json";
 
-const store = useViewListStore();
+import { storeToRefs } from "pinia";
+import { useViewListStore } from "@/store/viewStore";
+import { useHomeViewStore } from "@/store/homeViewStore";
+
+const renderData = ref([]);
+
+const homeViewStore = useHomeViewStore();
+const { filteredData, haveSearchTravel } = storeToRefs(homeViewStore);
+// const {} = homeViewStore;
+
+const viewListStore = useViewListStore();
+const { viewData } = storeToRefs(viewListStore);
+const { getViewsStoreData, setCityName } = viewListStore;
 
 const cityList = cityListData.map((item) => {
   return {
@@ -20,14 +31,21 @@ const getSelectCityData = () => {
     alert("請選擇地區");
     return;
   }
-  store.setCityName(selectCity.value);
-  console.log("city", selectCity.value);
-  console.log("storeData", store.cityName);
-  store.getData(selectCity.value);
+  setCityName(selectCity.value);
+  getViewsStoreData(selectCity.value);
 };
 
-onMounted(() => {
-  store.getData();
+onMounted(async () => {
+  console.log("haveSearchTravel", haveSearchTravel.value);
+  console.log("filteredData", filteredData.value);
+  if (haveSearchTravel.value) {
+    renderData.value = filteredData.value;
+    console.log("filteredData", filteredData.value);
+  } else {
+    await getViewsStoreData();
+    console.log("view", viewData.value);
+    renderData.value = viewData.value;
+  }
 });
 </script>
 
@@ -69,7 +87,7 @@ onMounted(() => {
         class="grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 xl:grid-cols-3"
       >
         <router-link
-          v-for="data in store.viewData"
+          v-for="data in renderData"
           :key="data.id"
           :to="`viewList/${data.id}`"
         >
