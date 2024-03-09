@@ -17,8 +17,13 @@ const is960Width = computed(() => {
     : (menuListShow.value = false);
 });
 
-const route = useRoute();
+const inputText = ref(null);
+const clickSearch = () => {
+  inputText.value.focus();
+  menuListShow.value = !menuListShow.value;
+};
 
+const route = useRoute();
 watch(route, (newRoute) => {
   if (newRoute.path) {
     // 切換頁面後自動關閉選單
@@ -44,7 +49,7 @@ watch(route, (newRoute) => {
         <router-link to="/">
           <img src="../assets/images/logo.svg" alt="logo" class="h-[21px]" />
         </router-link>
-        <button>
+        <button @click="clickSearch">
           <img
             src="../assets/images/icon/search-m.svg"
             alt="search"
@@ -58,6 +63,7 @@ watch(route, (newRoute) => {
       >
         <div class="relative pb-5 md:pb-0">
           <input
+            ref="inputText"
             type="text"
             class="inputStyle rounded-[60px] py-2 px-4 w-full text-[#188E6B] font-700 md:bg-[#f0f0f0]"
             placeholder="想要去哪?"
