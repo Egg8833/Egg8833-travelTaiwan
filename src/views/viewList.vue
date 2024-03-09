@@ -10,7 +10,8 @@ import { useHomeViewStore } from "@/store/homeViewStore";
 const renderData = ref([]);
 
 const homeViewStore = useHomeViewStore();
-const { filteredData, haveSearchTravel } = storeToRefs(homeViewStore);
+const { filteredData, haveSearchTravel, travelName } =
+  storeToRefs(homeViewStore);
 // const {} = homeViewStore;
 
 const viewListStore = useViewListStore();
@@ -27,25 +28,27 @@ const cityList = cityListData.map((item) => {
 const selectCity = ref("選擇地區");
 
 const getSelectCityData = () => {
+  haveSearchTravel.value = false;
+  travelName.value = "";
   if (selectCity.value === "選擇地區") {
     alert("請選擇地區");
     return;
   }
   setCityName(selectCity.value);
-  getViewsStoreData(selectCity.value);
+  renderFn();
+};
+
+const renderFn = async () => {
+  if (haveSearchTravel.value) {
+    renderData.value = filteredData.value;
+  } else {
+    await getViewsStoreData(selectCity.value);
+    renderData.value = viewData.value;
+  }
 };
 
 onMounted(async () => {
-  console.log("haveSearchTravel", haveSearchTravel.value);
-  console.log("filteredData", filteredData.value);
-  if (haveSearchTravel.value) {
-    renderData.value = filteredData.value;
-    console.log("filteredData", filteredData.value);
-  } else {
-    await getViewsStoreData();
-    console.log("view", viewData.value);
-    renderData.value = viewData.value;
-  }
+  await renderFn();
 });
 </script>
 

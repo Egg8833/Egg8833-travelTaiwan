@@ -4,11 +4,20 @@ import card from "../components/card.vue";
 import satisfaction from "../components/satisfaction.vue";
 import ArticleToggle from "../components/ArticleToggle.vue";
 import { useRoute } from "vue-router";
-import { useViewListStore } from "../store/viewStore";
 import ZipCode from "../assets/data/zipCode.json";
 import homeViewData from "@/assets/data/homeViewPoint.json";
 
-const store = useViewListStore();
+import { storeToRefs } from "pinia";
+import { useViewListStore } from "../store/viewStore";
+import { useHomeViewStore } from "@/store/homeViewStore";
+
+const homeViewStore = useHomeViewStore();
+const { filteredData, haveSearchTravel } = storeToRefs(homeViewStore);
+
+// const store = useViewListStore();
+const viewListStore = useViewListStore();
+const { viewData } = storeToRefs(viewListStore);
+const { getViewsStoreData, setCityName } = viewListStore;
 // store.getData();
 // 優化建議 進入頁面後把資料存入到localstrorage
 
@@ -24,22 +33,23 @@ const viewArea = [
 const route = useRoute();
 const viewListId = route.path.split("/").pop();
 
-const viewData = computed(() => {
+const renderViewData = computed(() => {
   // 從首頁熱門景點來的資料
   if (viewListId.startsWith("VCA")) {
-    let areaData = [];
-    homeViewData.forEach((e, i) => {
-      areaData.push(e[viewArea[i]]);
-    });
-    console.log("d", areaData);
-
-    let [data] = areaData.flat().filter((item) => item.id == viewListId);
-
+    const areaData = homeViewData
+      .map((e) => e[viewArea[homeViewData.indexOf(e)]])
+      .flat();
+    const data = areaData.find((item) => item.id === viewListId);
     return data;
   } else {
-    let [data] = store.viewData.filter((item) => item.id == viewListId);
-
-    return data;
+    // 搜尋結果資料
+    if (haveSearchTravel.value) {
+      const data = filteredData.value.find((item) => item.id === viewListId);
+      return data;
+    } else {
+      const data = store.viewData.find((item) => item.id === viewListId);
+      return data;
+    }
   }
 });
 
@@ -62,11 +72,6 @@ const zipCodeData = computed(() => {
   console.log("e", ZipCode[0]["臺北市"]);
   return ZipCode[viewData.value.ZipCode];
 });
-
-onMounted(() => {
-  console.log("store", store.viewData);
-  console.log("computed", viewData.value);
-});
 </script>
 
 <template>
@@ -82,7 +87,7 @@ onMounted(() => {
 
       <div class="flex justify-between items-center mb-1 md:mb-3">
         <h4 class="text-[#434343] font-700 text-[18px] md:text-[46px]">
-          {{ viewData.title }}
+          {{ renderViewData.title }}
         </h4>
         <div class="flex gap-2">
           <div
@@ -120,11 +125,11 @@ onMounted(() => {
           :commit="true"
           :commitNum="234"
         ></satisfaction>
-        <p class="text-[#808080]">{{ viewData.Address || " " }}</p>
+        <p class="text-[#808080]">{{ renderViewData.Address || " " }}</p>
       </div>
       <div class="flex gap-1 mb-2 md:mb-6">
         <button
-          v-for="(item, index) in viewData['tagText']"
+          v-for="(item, index) in renderViewData['tagText']"
           :key="index"
           class="tag"
         >
@@ -136,7 +141,10 @@ onMounted(() => {
       <div class="md:flex md:justify-between">
         <div class="-mx-6 md:w-[60%] md:order-1 md:mx-0">
           <div class="relative">
-            <img :src="viewData['photoSrc']" class="w-full object-cover" />
+            <img
+              :src="renderViewData['photoSrc']"
+              class="w-full object-cover"
+            />
             <div
               class="flex justify-center gap-2 absolute bottom-4 left-0 right-0"
             >
@@ -158,7 +166,7 @@ onMounted(() => {
               </h4>
               <ArticleToggle
                 class="text-[#616161 font-500 leading-5 md:text-[18px] leading-6"
-                :content="viewData['description']"
+                :content="renderViewData['description']"
                 :maxSummaryWordCount="150"
               ></ArticleToggle>
             </div>
@@ -171,9 +179,9 @@ onMounted(() => {
               </h4>
 
               <ArticleToggle
-                v-if="viewData['openTime']"
+                v-if="renderViewData['openTime']"
                 class="text-[#616161 font-500 leading-5 md:text-[18px] leading-6"
-                :content="viewData['openTime']"
+                :content="renderViewData['openTime']"
                 :maxSummaryWordCount="120"
               ></ArticleToggle>
               <p v-else>全日開放，依各店家營業時間為主。</p>
