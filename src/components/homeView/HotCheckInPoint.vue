@@ -4,7 +4,6 @@ import card from "../card.vue";
 const props = defineProps({
   data: Array,
 });
-console.log("prop", props.data);
 </script>
 
 <template>

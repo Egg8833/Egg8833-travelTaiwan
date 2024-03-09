@@ -21,10 +21,12 @@ export const useHomeViewStore = defineStore('homeView', () => {
     if (data.length === 0) {
       alert('查無相關景點資訊')
       travelName.value = ''
+      return
     }
 
     filteredData.value = processViewData(data)
 
+    console.log('filteredData.value', filteredData.value)
     haveSearchTravel.value = true
     router.push('/viewList')
   }

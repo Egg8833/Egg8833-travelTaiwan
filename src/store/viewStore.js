@@ -22,6 +22,7 @@ export const useViewListStore = defineStore('viewList', () => {
       return
     }
 
+    // viewList.value = cityData //假資料
     viewList.value = await getViewApi(cityName.value)
 
     viewData.value = processViewData(viewList.value)

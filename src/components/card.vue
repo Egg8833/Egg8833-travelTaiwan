@@ -25,7 +25,7 @@ const cardData = computed(() => props.cardData);
 <template>
   <div class="card shadow024 px-6 pt-5 pb-6 rounded-8px lg:flex-shrink-0">
     <div class="relative inline-block mb-2">
-      <img :src="cardData.photoSrc" class="object-cover w-[305px] h-[210px]" />
+      <img :src="cardData.photoSrc" class="object-cover w-[300px] h-[168px]" />
       <div
         class="absolute top-2 right-2 flex items-center justify-center w-10 h-10 bg-white border-[#28DAA5] rounded-full border-1 border-solid"
       >
@@ -46,7 +46,7 @@ const cardData = computed(() => props.cardData);
 
 <style>
 .card {
-  max-width: 354px;
+  max-width: 300px;
 }
 .shadow024 {
   box-shadow: 0px 4px 10px 0px #80808033;
