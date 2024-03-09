@@ -1,10 +1,22 @@
 <script setup>
 import { onMounted, ref } from "vue";
-import card from "../components/card.vue";
-import { useViewListStore } from "../store/viewStore";
-import cityListData from "../assets/data/cityList.json";
+import card from "@/components/card.vue";
+import cityListData from "@/assets/data/cityList.json";
 
-const store = useViewListStore();
+import { storeToRefs } from "pinia";
+import { useViewListStore } from "@/store/viewStore";
+import { useHomeViewStore } from "@/store/homeViewStore";
+
+const renderData = ref([]);
+
+const homeViewStore = useHomeViewStore();
+const { filteredData, haveSearchTravel, travelName } =
+  storeToRefs(homeViewStore);
+// const {} = homeViewStore;
+
+const viewListStore = useViewListStore();
+const { viewData } = storeToRefs(viewListStore);
+const { getViewsStoreData, setCityName } = viewListStore;
 
 const cityList = cityListData.map((item) => {
   return {
@@ -16,18 +28,27 @@ const cityList = cityListData.map((item) => {
 const selectCity = ref("選擇地區");
 
 const getSelectCityData = () => {
+  haveSearchTravel.value = false;
+  travelName.value = "";
   if (selectCity.value === "選擇地區") {
     alert("請選擇地區");
     return;
   }
-  store.setCityName(selectCity.value);
-  console.log("city", selectCity.value);
-  console.log("storeData", store.cityName);
-  store.getData(selectCity.value);
+  setCityName(selectCity.value);
+  renderFn();
 };
 
-onMounted(() => {
-  store.getData();
+const renderFn = async () => {
+  if (haveSearchTravel.value) {
+    renderData.value = filteredData.value;
+  } else {
+    await getViewsStoreData(selectCity.value);
+    renderData.value = viewData.value;
+  }
+};
+
+onMounted(async () => {
+  await renderFn();
 });
 </script>
 
@@ -69,7 +90,7 @@ onMounted(() => {
         class="grid grid-cols-1 justify-items-center gap-8 md:grid-cols-2 xl:grid-cols-3"
       >
         <router-link
-          v-for="data in store.viewData"
+          v-for="data in renderData"
           :key="data.id"
           :to="`viewList/${data.id}`"
         >

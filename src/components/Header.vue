@@ -1,12 +1,29 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useWindowSize } from "@vueuse/core";
 const { width: windowWidth } = useWindowSize();
+
+import { useRoute, useRouter } from "vue-router";
+import { storeToRefs } from "pinia";
+import { useHomeViewStore } from "@/store/homeViewStore";
+const homeViewStore = useHomeViewStore();
+const { travelName } = storeToRefs(homeViewStore);
+const { searchTravel } = homeViewStore;
+
 const menuListShow = ref(false);
 const is960Width = computed(() => {
   windowWidth.value >= 960
     ? (menuListShow.value = true)
     : (menuListShow.value = false);
+});
+
+const route = useRoute();
+
+watch(route, (newRoute) => {
+  if (newRoute.path) {
+    // 切換頁面後自動關閉選單
+    menuListShow.value = false;
+  }
 });
 </script>
 
@@ -42,14 +59,17 @@ const is960Width = computed(() => {
         <div class="relative pb-5 md:pb-0">
           <input
             type="text"
-            class="inputStyle rounded-[60px] py-2 px-4 w-full md:bg-[#f0f0f0]"
+            class="inputStyle rounded-[60px] py-2 px-4 w-full text-[#188E6B] font-700 md:bg-[#f0f0f0]"
             placeholder="想要去哪?"
+            v-model="travelName"
           />
-          <img
-            src="../assets/images/icon/search.svg"
-            alt="search"
-            class="absolute right-4 top-[10px]"
-          />
+          <button @click="searchTravel(travelName)">
+            <img
+              src="../assets/images/icon/search.svg"
+              alt="search"
+              class="absolute right-4 top-[10px]"
+            />
+          </button>
         </div>
         <ul class="flex flex-wrap gap-x-3 gap-y-5 justify-center">
           <li>

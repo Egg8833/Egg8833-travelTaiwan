@@ -4,6 +4,7 @@ import card from "../card.vue";
 const props = defineProps({
   data: Array,
 });
+console.log("prop", props.data);
 </script>
 
 <template>
@@ -18,33 +19,27 @@ const props = defineProps({
         >
           熱門打卡景點
         </h2>
-        <button class="btn hidden lg:block">查看更多</button>
+        <router-link to="/viewList" class="btn hidden lg:block"
+          >查看更多</router-link
+        >
       </div>
 
       <div class="relative">
-        <button
-          class="shadow024 hidden w-[50px] h-[50px] rounded-full bg-white items-center justify-center absolute -left-1 top-1/2 -translate-y-1/2 z-2 lg:flex"
-        >
-          <img src="../assets/images/icon/arrow-left.svg" alt="" />
-        </button>
-        <button
-          class="shadow024 w-[50px] h-[50px] rounded-full bg-white items-center justify-center absolute right-3 top-1/2 -translate-y-1/2 z-2 hidden lg:flex"
-        >
-          <img src="../assets/images/icon/arrow-right.svg" alt="" />
-        </button>
         <div
           class="flex gap-5 flex-wrap justify-center pb-8 lg:flex-nowrap lg:justify-unset lg:overflow-x-hidden lg:gap-12"
         >
-          <card
+          <router-link
             v-for="data in props.data"
             :key="data.id"
-            :cardData="data"
-          ></card>
+            :to="`viewList/${data.id}`"
+          >
+            <card :cardData="data"></card>
+          </router-link>
         </div>
       </div>
     </div>
     <div class="flex justify-center pb-9 lg:hidden">
-      <button class="btn">查看更多</button>
+      <router-link to="/viewList" class="btn">查看更多</router-link>
     </div>
   </div>
 </template>
