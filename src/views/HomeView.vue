@@ -6,9 +6,9 @@ import HotCheckInPoint from "@/components/homeView/HotCheckInPoint.vue";
 import { storeToRefs } from "pinia";
 import { useHomeViewStore } from "@/store/homeViewStore";
 
-const homeViewstore = useHomeViewStore();
-const { travelName } = storeToRefs(homeViewstore);
-const { searchTravel } = homeViewstore;
+const homeViewStore = useHomeViewStore();
+const { travelName } = storeToRefs(homeViewStore);
+const { searchTravel } = homeViewStore;
 
 const data1 = [
   {
@@ -57,7 +57,6 @@ const data1 = [
 
 <template>
   <div class="homeIndex">
-    <button @click="increment">@123</button>
     <!-- banner首頁 -->
     <div class="banner flex items-center justify-center flex-col">
       <h1
