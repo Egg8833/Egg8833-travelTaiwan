@@ -83,10 +83,6 @@ const sliderStyle = computed(() => {
   };
 });
 
-const onlineImage = (img) => {
-  return img[0].startsWith("https") ? img : getImagePath(img);
-};
-
 watch(deviceWidth, () => {
   idx.value = 0;
 });
@@ -187,7 +183,7 @@ watch(deviceWidth, () => {
                 :style="sliderStyle"
               >
                 <img
-                  :src="onlineImage(data.photoSrc)"
+                  :src="getImagePath(data.photoSrc)"
                   class="w-50 h-50 object-cover"
                   :alt="data.title"
                 />

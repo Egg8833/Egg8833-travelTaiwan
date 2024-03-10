@@ -1,18 +1,20 @@
 <script setup>
-import { computed, onMounted, ref } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import card from "../components/card.vue";
 import satisfaction from "../components/satisfaction.vue";
 import ArticleToggle from "../components/ArticleToggle.vue";
 import { useRoute } from "vue-router";
-import ZipCode from "../assets/data/zipCode.json";
-import homeViewData from "@/assets/data/homeViewPoint.json";
 
+import { getImagePath } from "@/common/useImage";
+import allViewPoint from "@/assets/data/allViewPoint.json";
 import { storeToRefs } from "pinia";
 import { useViewListStore } from "../store/viewStore";
 import { useHomeViewStore } from "@/store/homeViewStore";
-
+import processViewData from "@/common/processList.js";
 const homeViewStore = useHomeViewStore();
-const { filteredData, haveSearchTravel } = storeToRefs(homeViewStore);
+const { filteredData, haveSearchTravel, randomThreeItems } =
+  storeToRefs(homeViewStore);
+const { getRandomItemsFromArray } = homeViewStore;
 
 // const store = useViewListStore();
 const viewListStore = useViewListStore();
@@ -21,43 +23,61 @@ const { getViewsStoreData, setCityName } = viewListStore;
 // store.getData();
 // 優化建議 進入頁面後把資料存入到localstrorage
 
-const viewArea = [
-  "北部地區",
-  "中部地區",
-  "南部地區",
-  "東部地區",
-  "離島地區",
-  "熱門打卡",
-];
-
 const route = useRoute();
-const viewListId = route.path.split("/").pop();
+const viewListId = ref(route.path.split("/").pop());
 
 const renderViewData = computed(() => {
   // 從首頁熱門景點來的資料
-  if (viewListId.startsWith("VCA")) {
-    const areaData = homeViewData
-      .map((e) => e[viewArea[homeViewData.indexOf(e)]])
-      .flat();
-    const data = areaData.find((item) => item.id === viewListId);
+
+  if (viewListId.value.startsWith("VCA")) {
+    const areaData = processViewData(allViewPoint);
+
+    const data = areaData.find((item) => item.id === viewListId.value);
+
     return data;
   } else {
     // 搜尋結果資料
     if (haveSearchTravel.value) {
-      const data = filteredData.value.find((item) => item.id === viewListId);
+      const data = filteredData.value.find(
+        (item) => item.id === viewListId.value
+      );
       return data;
     } else {
-      const data = viewListStore.viewData.find(
-        (item) => item.id === viewListId
-      );
+      // api景點資料
+      const data = viewData.value.find((item) => item.id === viewListId.value);
+
       return data;
     }
   }
 });
+
+const commitList = ref([
+  {
+    title: "不錯的景點",
+    txt: "風景好視野開闊，看海看山看夕陽。黃昏時分人潮眾多。休閒放鬆的好去處。",
+  },
+  {
+    title: "悠閒放鬆的好地方",
+    txt: "若有閒暇時間，非常適合放慢腳步，坐於岸邊品嚐各式美食，享受一下晝與夜的美景。",
+  },
+  {
+    title: "人潮多，避開人群",
+    txt: "建議平日造訪，假日太多人，旅遊品質會下降。平日早訪，會有比較好的旅遊品質",
+  },
+]);
+
+const noServe = () => {
+  alert("此服務尚未開啟,敬請期待");
+};
+
+const moveToNewViewPoint = (id) => {
+  viewListId.value = id;
+  randomThreeItems.value = getRandomItemsFromArray(allViewPoint, 3);
+};
 </script>
 
 <template>
-  <div class="max-w-[1232px] mx-auto">
+  <div class="max-w-[1232px] mx-auto overflow-hidden">
     <div class="pt-3 px-6 xl:px-4">
       <!-- 麵包屑 -->
       <router-link to="/viewList" class="group flex items-center mb-2 md:mb-3">
@@ -107,7 +127,9 @@ const renderViewData = computed(() => {
           :commit="true"
           :commitNum="234"
         ></satisfaction>
-        <p class="text-[#808080]">{{ renderViewData.Address || " " }}</p>
+        <p class="text-[#808080] w-30 md:w-unset">
+          {{ renderViewData.Address || " " }}
+        </p>
       </div>
       <div class="flex gap-1 mb-2 md:mb-6">
         <button
@@ -124,17 +146,17 @@ const renderViewData = computed(() => {
         <div class="-mx-6 md:w-[60%] md:order-1 md:mx-0">
           <div class="relative">
             <img
-              :src="renderViewData['photoSrc']"
+              :src="getImagePath(renderViewData['photoSrc'])"
               class="w-full object-cover"
             />
             <div
               class="flex justify-center gap-2 absolute bottom-4 left-0 right-0"
             >
-              <button
+              <!-- <button
                 v-for="(item, index) in 3"
                 :key="index"
                 class="w-[10px] h-[10px] rounded-full bg-[#FFF]"
-              ></button>
+              ></button> -->
             </div>
           </div>
         </div>
@@ -214,7 +236,10 @@ const renderViewData = computed(() => {
                   搭乘982、307等路線，至板橋站站牌，往中山路步行五分鐘即可抵達
                 </p>
 
-                <button class="flex items-center btn-secondary">
+                <button
+                  class="flex items-center btn-secondary"
+                  @click="noServe"
+                >
                   查看車次即時動態
                   <img
                     src="../assets/images/icon/bus-filled.svg"
@@ -237,7 +262,10 @@ const renderViewData = computed(() => {
                   搭至板橋站，往中山路步行五分鐘即可抵達
                 </p>
 
-                <button class="flex items-center btn-secondary">
+                <button
+                  class="flex items-center btn-secondary"
+                  @click="noServe"
+                >
                   查看車次即時動態
                   <img
                     src="../assets/images/icon/train-filled.svg"
@@ -258,7 +286,10 @@ const renderViewData = computed(() => {
                   搭至板橋站，往中山路步行五分鐘即可抵達
                 </p>
 
-                <button class="flex items-center btn-secondary">
+                <button
+                  class="flex items-center btn-secondary"
+                  @click="noServe"
+                >
                   查看車次即時動態
                   <img
                     src="../assets/images/icon/mrt-filled.svg"
@@ -298,11 +329,19 @@ const renderViewData = computed(() => {
         </div>
         <div>
           <!-- 評價區塊 -->
-          <div v-for="(i, index) in 3" :key="i">
+          <div v-for="(i, index) in commitList" :key="i">
             <div class="pt-4 flex items-end">
-              <img src="../assets/images/people.png" alt="" />
+              <img
+                src="../assets/images/people.png"
+                alt=""
+                v-if="index === 0"
+              />
+              <div
+                v-if="index !== 0"
+                class="w-10 h-10 rounded-full bg-[#208080]"
+              ></div>
               <p class="ml-2 text-[18px] font-700 text-[#434343]">
-                路上容易塞車
+                {{ i.title }}
               </p>
               <div class="ml-auto">
                 <satisfaction :startNum="3"></satisfaction>
@@ -313,12 +352,12 @@ const renderViewData = computed(() => {
               :class="{ 'border-b-0': index + 1 === 3 }"
             >
               <p class="leading-6">
-                最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五最多一百五
+                {{ i.txt }}
               </p>
             </div>
           </div>
           <div class="flex justify-center pt-7 pb-10">
-            <button class="btn">查看更多</button>
+            <button class="btn" @click="noServe">查看更多</button>
           </div>
         </div>
         <div class="pb-10">
@@ -328,7 +367,15 @@ const renderViewData = computed(() => {
           <div
             class="flex justify-center flex-col gap-4 items-center md:grid md:grid-cols-3 md:gap-6"
           >
-            <!-- <card :cardData="data2"></card> -->
+            <!-- v-for="data in randomThreeItems" -->
+            <router-link
+              @click="moveToNewViewPoint(data.id)"
+              v-for="data in randomThreeItems"
+              :key="data.id"
+              :to="`${data.id}`"
+            >
+              <card :cardData="data"></card>
+            </router-link>
           </div>
         </div>
       </div>
