@@ -87,7 +87,7 @@ watch(route, (newRoute) => {
               <img src="../assets/images/icon/tour-o.svg" alt="tour" />
             </router-link>
           </li>
-          <li>
+          <!-- <li>
             <a
               href=""
               class="flex gap-x-2 py-3 px-5 rounded-[62px] bg-[#FFF] font-700 text-[#616161] border-1 border-solid border-[#1Fb588] hover:bg-[#DAF9F0]"
@@ -104,7 +104,7 @@ watch(route, (newRoute) => {
               找餐廳
               <img src="../assets/images/icon/food-o.svg" alt="food" />
             </a>
-          </li>
+          </li> -->
           <li>
             <a
               href=""

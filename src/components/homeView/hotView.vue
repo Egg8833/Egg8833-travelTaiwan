@@ -7,6 +7,7 @@ import southMap from "@/assets/images/map_south.png";
 import eastMap from "@/assets/images/map_east.png";
 import islandMap from "@/assets/images/map_island.png";
 import { useWindowSize } from "@vueuse/core";
+import { getImagePath } from "@/common/useImage";
 
 const { width: deviceWidth } = useWindowSize();
 const selectIndex = ref(0);
@@ -81,6 +82,10 @@ const sliderStyle = computed(() => {
   `,
   };
 });
+
+const onlineImage = (img) => {
+  return img[0].startsWith("https") ? img : getImagePath(img);
+};
 
 watch(deviceWidth, () => {
   idx.value = 0;
@@ -182,7 +187,7 @@ watch(deviceWidth, () => {
                 :style="sliderStyle"
               >
                 <img
-                  :src="data.photoSrc"
+                  :src="onlineImage(data.photoSrc)"
                   class="w-50 h-50 object-cover"
                   :alt="data.title"
                 />

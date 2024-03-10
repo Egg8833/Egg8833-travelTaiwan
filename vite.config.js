@@ -1,4 +1,5 @@
 import {defineConfig} from 'vite'
+import {fileURLToPath, URL} from 'url'
 import vue from '@vitejs/plugin-vue'
 import UnoCSS from 'unocss/vite'
 import {resolve} from 'path'
@@ -9,7 +10,8 @@ export default defineConfig({
   resolve: {
     alias: {
       // @ 替代为 src
-      '@': resolve(__dirname, 'src'),
+      // '@': resolve(__dirname, 'src'),
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
       // @component 替代为 src/component
       '@components': resolve(__dirname, 'src/components'),
     },
