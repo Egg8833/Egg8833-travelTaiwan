@@ -2,6 +2,8 @@
 import satisfaction from "../components/satisfaction.vue";
 import favoriteImg from "../assets/images/icon/heart-outline.svg";
 import { computed } from "vue";
+import { getImagePath } from "@/common/useImage";
+
 const props = defineProps({
   cardData: {
     type: Object,
@@ -25,7 +27,10 @@ const cardData = computed(() => props.cardData);
 <template>
   <div class="card shadow024 px-6 pt-5 pb-6 rounded-8px lg:flex-shrink-0">
     <div class="relative inline-block mb-2">
-      <img :src="cardData.photoSrc" class="object-cover w-[300px] h-[168px]" />
+      <img
+        :src="getImagePath(cardData.photoSrc)"
+        class="object-cover w-[300px] h-[168px]"
+      />
       <div
         class="absolute top-2 right-2 flex items-center justify-center w-10 h-10 bg-white border-[#28DAA5] rounded-full border-1 border-solid"
       >

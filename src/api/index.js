@@ -9,7 +9,6 @@ export async function getViewApi(area = Taipei) {
       headers: getAuthorizationHeader(),
     })
     .then(function (response) {
-      console.log('area', area)
       return response.data
     })
     .catch(function (error) {

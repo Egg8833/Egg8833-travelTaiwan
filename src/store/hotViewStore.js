@@ -20,12 +20,6 @@ export const hotViewDataStore = defineStore('hotViewData', () => {
 
   const changeSelectIndex = index => {
     selectIndex.value = index
-    console.log('select idx', selectIndex.value)
-  }
-  const count = ref(0)
-  function increment() {
-    count.value++
-    console.log('count', count.value)
   }
 
   return {

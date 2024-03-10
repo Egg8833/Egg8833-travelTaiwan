@@ -5,9 +5,10 @@ import HotView from "@/components/homeView/HotView.vue";
 import HotCheckInPoint from "@/components/homeView/HotCheckInPoint.vue";
 import { storeToRefs } from "pinia";
 import { useHomeViewStore } from "@/store/homeViewStore";
+import allViewPoint from "@/assets/data/allViewPoint.json";
 
 const homeViewStore = useHomeViewStore();
-const { travelName } = storeToRefs(homeViewStore);
+const { travelName, randomThreeItems } = storeToRefs(homeViewStore);
 const { searchTravel } = homeViewStore;
 
 const data1 = [
@@ -53,6 +54,11 @@ const data1 = [
     Address: "高雄市845內門區",
   },
 ];
+
+const clickViewPoint = () => {
+  travelName.value = "楓";
+  searchTravel(travelName.value);
+};
 </script>
 
 <template>
@@ -97,7 +103,9 @@ const data1 = [
         <br class="md:hidden" />
         注目景點!
       </h3>
-      <button class="btn mb-[104px]">賞楓秘境看這裡</button>
+      <button class="btn mb-[104px]" @click="clickViewPoint">
+        賞楓秘境看這裡
+      </button>
     </div>
 
     <!-- life -->
@@ -115,11 +123,11 @@ const data1 = [
     </div>
 
     <!-- 聽他們介紹旅遊行程 -->
-    <div>
+    <!-- <div>
       <h2 class="pb-6 text-center text-[30px] text-[#188E6B] font-700">
         看達人怎麼玩
       </h2>
-    </div>
+    </div> -->
   </div>
 </template>
 

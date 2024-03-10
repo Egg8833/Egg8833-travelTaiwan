@@ -107,7 +107,7 @@ watch(route, (newRoute) => {
           </li> -->
           <li>
             <a
-              href=""
+              href="#"
               class="flex gap-x-2 py-3 px-5 rounded-[62px] font-500 text-[#fff] bg-[#1FB588] hover:bg-[#588E6B]"
             >
               我的旅程
