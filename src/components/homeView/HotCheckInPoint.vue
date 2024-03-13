@@ -8,7 +8,7 @@ const props = defineProps({
 
 <template>
   <!-- life -->
-  <div class="lg:max-w-[1200px] lg:mx-auto">
+  <div class="md:max-w-[1200px] md:mx-auto">
     <div class="px-4 lg:px-0">
       <div
         class="pt-7 pb-6 flex justify-center items-center lg:justify-between lg:pl-6 lg:pr-10"
@@ -25,7 +25,7 @@ const props = defineProps({
 
       <div class="relative">
         <div
-          class="flex gap-5 flex-wrap justify-center pb-8 lg:flex-nowrap lg:justify-unset lg:overflow-x-hidden lg:gap-12"
+          class="flex gap-5 flex-wrap justify-center pb-8 lg:flex-nowrap lg:overflow-x-hidden lg:gap-12"
         >
           <router-link
             v-for="data in props.data"
