@@ -211,7 +211,8 @@ const moveToNewViewPoint = (id) => {
             </li>
           </ul>
         </div>
-        <div>
+        <!-- 交通方式 -->
+        <!-- <div>
           <h4 class="text-[#188E6B] font-700 text-[24px] pb-3 md:text-[32px]">
             交通方式
           </h4>
@@ -221,7 +222,7 @@ const moveToNewViewPoint = (id) => {
               大眾運輸
             </p>
           </div>
-          <!-- 交通工具 -->
+
           <div class="md:flex">
             <div
               class="p-9 border-b border-b-solid border-[#eee] md:border-b-0 md:border-r-solid md:border-r"
@@ -300,11 +301,11 @@ const moveToNewViewPoint = (id) => {
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <!-- 評價 -->
-      <div>
+      <div class="mt-5">
         <div>
           <h4 class="text-[#188E6B] font-700 text-[24px] pb-4 md:text-[32px]">
             旅客評價
