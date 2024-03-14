@@ -17,8 +17,10 @@ export async function getViewApi(area = Taipei) {
 }
 function getAuthorizationHeader() {
   //  填入自己 ID、KEY 開始
-  let AppID = 'egg8833-1f51e68c-c84f-41d9'
-  let AppKey = 'c8c65c48-4536-4c3d-bf6c-f774508f5532'
+  let AppID = import.meta.env.VITE_APP_ID
+  let AppKey = import.meta.env.VITE_APP_ID
+  console.log('appId', import.meta)
+  console.log('appId', import.meta.env)
   //  填入自己 ID、KEY 結束
   let GMTString = new Date().toGMTString()
   let ShaObj = new jsSHA('SHA-1', 'TEXT')
