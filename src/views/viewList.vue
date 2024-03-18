@@ -41,7 +41,7 @@ const renderData = computed(() => {
     return filteredData.value;
   } else {
     getViewsStoreData(selectCity.value);
-    return (renderData.value = viewData.value);
+    return viewData.value;
   }
 });
 </script>

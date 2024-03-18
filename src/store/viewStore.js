@@ -17,7 +17,7 @@ export const useViewListStore = defineStore('viewList', () => {
 
   async function getViewsStoreData() {
     if (viewList.value.length > 0 && cityName.value === cityNameApi.value) {
-      console.log('資料重複取得，未呼叫api')
+      // console.log('資料重複取得，未呼叫api')
       return
     }
 

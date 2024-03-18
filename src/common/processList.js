@@ -7,8 +7,8 @@ export default function processViewData(dataList) {
     const tagText = [e.Class1, e.Class2, e.Class3].filter(Boolean)
     const photoSrc = [
       e.Picture.PictureUrl1,
-      e.Picture.PictureUrl2,
-      e.Picture.PictureUrl3,
+      // e.Picture.PictureUrl2,
+      // e.Picture.PictureUrl3,
     ].filter(Boolean)
 
     if (photoSrc.length === 0) {
