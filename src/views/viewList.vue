@@ -1,18 +1,17 @@
 <script setup>
-import { onMounted, ref, computed } from "vue";
+import { ref, computed } from "vue";
 import card from "@/components/card.vue";
 import cityListData from "@/assets/data/cityList.json";
 
 import { storeToRefs } from "pinia";
 import { useViewListStore } from "@/store/viewStore";
 import { useHomeViewStore } from "@/store/homeViewStore";
+import { useWindowScroll } from "@vueuse/core";
 
-// const renderData = ref([]);
-
+const { y: scrollTop } = useWindowScroll();
 const homeViewStore = useHomeViewStore();
 const { filteredData, haveSearchTravel, travelName } =
   storeToRefs(homeViewStore);
-// const {} = homeViewStore;
 
 const viewListStore = useViewListStore();
 const { viewData } = storeToRefs(viewListStore);
@@ -44,14 +43,20 @@ const renderData = computed(() => {
     return viewData.value;
   }
 });
+const goToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+};
 </script>
 
 <template>
   <div class="viewList">
     <div class="banner flex items-center"></div>
-    <div class="max-w-[1200px] mx-auto pt-4 pb-10 xxl:max-w-[1400px]">
+    <div class="max-w-[1200px] mx-auto pt-4 pb-10 xxl:max-w-[1400px] relative">
       <div
-        class="flex justify-center items-center pb-8 px-5 md:justify-between"
+        class="viewListTitle flex justify-center items-center pb-8 px-5 md:justify-between"
       >
         <h2 class="text-[26px] text-[#188E6B] font-700 mr-2 md:text-[32px]">
           景點列表
@@ -100,6 +105,22 @@ const renderData = computed(() => {
           查無相關景點，請再次搜尋...
         </p>
       </div>
+
+      <button
+        class="fixed right-2 bottom-24 lg:right-4"
+        v-if="scrollTop > 200"
+        @click="goToTop"
+      >
+        <img
+          src="../assets/images/goToTop.svg"
+          alt=""
+          style="
+            filter: invert(54%) sepia(39%) saturate(745%) hue-rotate(111deg)
+              brightness(98%) contrast(96%);
+          "
+          class="w-10 md:w-12 object-cover"
+        />
+      </button>
     </div>
   </div>
 </template>
